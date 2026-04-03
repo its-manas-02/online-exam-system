@@ -1,13 +1,15 @@
 import React from "react";
 
 export default function Dashboard() {
-    const user = JSON.parse(localStorage.getItem("user")) || {
-        username: "User",
-        };
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+    // const user = JSON.parse(localStorage.getItem("user")) || {
+    //     username: "User",
+    //     };
     
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {user.role !== "admin" && (
+      {user?.role !== "admin" && (
         <div className="w-64 p-5 text-white bg-gray-900">
           <h2 className="mb-6 text-xl font-bold">My App</h2>
 

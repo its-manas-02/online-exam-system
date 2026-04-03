@@ -4,9 +4,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import bgImage from "../assets/bg.jpg"
 import { useNavigate } from "react-router-dom";
 
-// const navigate = useNavigate();
-
-function Login() {
+export default function Login() {
   const navigate = useNavigate();
   React.useEffect(() => {
     const token = localStorage.getItem("token");
@@ -74,7 +72,7 @@ function Login() {
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
           <div className="flex items-center gap-4">
-            <label htmlFor="email" className="w-24">Email or phone no:</label>
+            <label htmlFor="key" className="w-24">Email or phone no:</label>
             <input
               type="text"
               id="key"
@@ -118,5 +116,3 @@ function Login() {
     </div>
   )
 }
-
-export default Login

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCircleUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 
-const navbar = () => {
+export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
   const [islogin, setIsLogin] = React.useState(false)
 
@@ -59,5 +59,3 @@ const navbar = () => {
     </>
   )
 }
-
-export default navbar

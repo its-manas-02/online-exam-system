@@ -67,7 +67,7 @@ function Register() {
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       
-      // console.log("Success:", data);
+      console.log("Success:", data);
       setError(""); // clear error
     } catch (err) {
       setError(err.message);
@@ -164,7 +164,7 @@ export default Register
 // import React from "react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import Register from './Register';
+// import Register from './Register';
 
 // function Register() {
 //   const [isLogin, setIsLogin] = React.useState(true);
