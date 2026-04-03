@@ -2,8 +2,17 @@ import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import bgImage from "../assets/bg.jpg"
+import { useNavigate } from "react-router-dom";
 
 function Register() {
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, []);
+    
   const [form, setForm] = React.useState({
     username: "",
     email: "",
@@ -12,6 +21,7 @@ function Register() {
   });
   const [error, setError] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,7 +31,7 @@ function Register() {
     e.preventDefault()
     console.log("submit cllicked")
     // Handle form submission logic here
-    
+     
     const usernameRegex = /^[A-Za-z]+$/;
     const passwordRegex = /^[A-Za-z0-9@#$&!?/_*%]+$/;
     const phoneRegex = /^\d{10}$/;
@@ -36,6 +46,7 @@ function Register() {
       return setError("Phone number must contain exactly 10 digits");
     }
 
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:5000/api/register", {
         method: "POST",
@@ -51,10 +62,17 @@ function Register() {
         throw new Error(data.message || "Something went wrong");
       }
 
-      console.log("Success:", data);
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      console.log("Redirecting to dashboard...");
+      navigate("/dashboard");
+      
+      // console.log("Success:", data);
       setError(""); // clear error
     } catch (err) {
       setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -127,8 +145,8 @@ function Register() {
           {error && <p className="text-red-500">{error}</p>}
           
           <div className="flex justify-center">
-            <button type='submit' className="px-4 py-1 text-white bg-blue-600 rounded-md ">
-              Submit
+            <button type='submit' className="px-4 py-1 text-white bg-blue-600 rounded-md" disabled={loading}>
+              {loading ? "Registering..." : "Register"}
             </button>
           </div>
 
@@ -146,6 +164,7 @@ export default Register
 // import React from "react";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import Register from './Register';
 
 // function Register() {
 //   const [isLogin, setIsLogin] = React.useState(true);
