@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCircleUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 export default function Navbar() {
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
   const [islogin, setIsLogin] = React.useState(false)
   React.useEffect(() => {
@@ -35,12 +37,28 @@ export default function Navbar() {
 
   return (
     <>
-      <div className='flex items-center justify-between px-2 text-2xl text-white bg-blue-700'>
+      <div className='flex items-center justify-between px-2 text-white bg-blue-700 text-2 xl'>
         <div className='cursor-pointer' onClick={handelclick}>
           <FontAwesomeIcon icon={faBars} />
         </div>
-        <div className='cursor-pointer' onClick={() => setIsLogin(!islogin)}>
+        {/* <div className='cursor-pointer' onClick={() => setIsLogin(!islogin)}>
           <FontAwesomeIcon icon={faCircleUser} />
+        </div> */}
+        <div>
+          <div className="flex items-center gap-4">
+            <span>{user.username}</span>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                localStorage.removeItem("user");
+                window.location.href = "/login";
+              }}
+              className="px-2 py-1 text-white bg-red-500 rounded"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
 
@@ -94,6 +112,7 @@ export default function Navbar() {
             >Support</NavLink>
         </nav>
       </div>
+      
     </>
   )
 }
