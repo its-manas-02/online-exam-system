@@ -9,13 +9,13 @@ export default function Dashboard() {
     
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {user?.role !== "admin" && (
+      {user?.role === "admin" && (
         <div className="w-64 p-5 text-white bg-gray-900">
           <h2 className="mb-6 text-xl font-bold">My App</h2>
 
           <ul className="space-y-3">
             <li className="cursor-pointer hover:text-gray-300">Dashboard</li>
-            <li className="cursor-pointer hover:text-gray-300">Profile</li>
+            <li className="cursor-pointer hover:text-gray-300">Users</li>
             <li className="cursor-pointer hover:text-gray-300">Settings</li>
           </ul>
         </div>
@@ -23,6 +23,15 @@ export default function Dashboard() {
 
       {/* Main */}
       <div className="flex-1">
+        {user?.role !== "admin" && (
+        <div className="flex items-start justify-start bg-gray-300">
+          <div className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5">Dashboard</div>
+          <div className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5">Results</div>
+          {/* {user?.role === "teacher" && ( */}
+            <div className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5">Add Quiz</div>
+           {/* )} */}
+        </div>
+        )}
 
         {/* Top Navbar */}
         <div className="flex items-center justify-between p-4 bg-white shadow">
