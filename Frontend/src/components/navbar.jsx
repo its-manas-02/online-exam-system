@@ -1,3 +1,4 @@
+// Frontend/src/components/Navbar
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,17 +7,31 @@ import { faBars, faCircleUser, faXmark } from '@fortawesome/free-solid-svg-icons
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
   const [islogin, setIsLogin] = React.useState(false)
+  React.useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape') {
+        setIsSidebarOpen(false)
+      }
+    }
+
+    window.addEventListener('keydown', handleEsc)
+    return () => window.removeEventListener('keydown', handleEsc)
+  }, [])
 
   function handelclick() {
-    setIsSidebarOpen(true)
+    setIsSidebarOpen(prev => !prev)
   }
 
   function closeSidebar() {
     setIsSidebarOpen(false)
   }
 
-  const linkClassName = ({ isActive }) =>
-    `block rounded-md px-3 py-2 text-lg ${isActive ? 'bg-blue-100 text-blue-800' : 'hover:bg-gray-100'}`
+ const linkClassName = ({ isActive }) =>
+  `block rounded-md px-3 py-2 text-lg transition duration-200 ${
+    isActive
+      ? 'bg-blue-100 text-blue-800'
+      : 'hover:bg-gray-100 hover:pl-4'
+  }`
 
   return (
     <>
@@ -45,15 +60,38 @@ export default function Navbar() {
         </div>
 
         <nav className='space-y-2'>
-          <NavLink to='/' className={linkClassName} onClick={closeSidebar}>
-            Home
-          </NavLink>
-          <NavLink to='/about' className={linkClassName} onClick={closeSidebar}>
-            About
-          </NavLink>
-          <NavLink to='/support' className={linkClassName} onClick={closeSidebar}>
-            Support
-          </NavLink>
+          <NavLink
+            to='/'
+            className={({ isActive }) =>
+              `block rounded-md px-3 py-2 text-lg transition duration-200 ${
+                isActive
+                  ? 'bg-blue-100 text-blue-800 shadow'
+                  : 'hover:bg-gray-100 hover:shadow-md'
+              }`
+            }
+            onClick={closeSidebar}
+          >Home</NavLink>
+          <NavLink 
+          to='/about' 
+          className={({ isActive }) =>
+              `block rounded-md px-3 py-2 text-lg transition duration-200 ${
+                isActive
+                  ? 'bg-blue-100 text-blue-800 shadow'
+                  : 'hover:bg-gray-100 hover:shadow-md'
+              }`
+            }
+            onClick={closeSidebar}
+            >About</NavLink>
+          <NavLink to='/support' 
+          className={({ isActive }) =>
+              `block rounded-md px-3 py-2 text-lg transition duration-200 ${
+                isActive
+                  ? 'bg-blue-100 text-blue-800 shadow'
+                  : 'hover:bg-gray-100 hover:shadow-md'
+              }`
+            } 
+            onClick={closeSidebar}
+            >Support</NavLink>
         </nav>
       </div>
     </>

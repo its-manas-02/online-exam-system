@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router-dom";
-
 import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
@@ -7,6 +6,7 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import AddQuiz from "../pages/Addquiz";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Result from "../pages/Result"
 
 const router = createBrowserRouter([
   {
@@ -33,6 +33,15 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AddQuiz />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "results",
+        element: (
+          <ProtectedRoute>
+            <Result />
           </ProtectedRoute>
         ),
       },
