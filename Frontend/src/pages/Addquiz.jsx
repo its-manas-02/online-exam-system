@@ -54,6 +54,7 @@ export default function Addquiz() {
             <input
                 type="text"
                 name="topic"
+                onChange={handleChange}
                 placeholder="Enter topic..."
                 className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
             />
@@ -78,6 +79,7 @@ export default function Addquiz() {
                     <input
                     type="text"
                     name={`question-${i}`}
+                    onChange={handleChange}
                     className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-400"
                     />
                 </div>
@@ -92,6 +94,7 @@ export default function Addquiz() {
                         <input
                         type="text"
                         name={`option-${i}-${opt}`}
+                        onChange={handleChange}
                         className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
@@ -105,6 +108,7 @@ export default function Addquiz() {
                     </label>
                     <select
                     name={`correct-${i}`}
+                    onChange={handleChange}
                     className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-green-500"
                     >
                     {[1, 2, 3, 4].map((opt) => (
