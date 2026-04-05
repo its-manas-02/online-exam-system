@@ -6,7 +6,8 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 import AddQuiz from "../pages/Addquiz";
 import ProtectedRoute from "../components/ProtectedRoute";
-import Result from "../pages/Result"
+import Result from "../pages/Result";
+import Ranking from "../pages/Ranking";
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,15 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Result />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "ranking",
+        element: (
+          <ProtectedRoute>
+            <Ranking />
           </ProtectedRoute>
         ),
       },

@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const storedUser = localStorage.getItem("user");
@@ -21,24 +20,7 @@ export default function Dashboard() {
 
       {/* Main */}
       <div className="flex-1">
-        {user?.role !== "admin" && (
-        <div className="flex items-start justify-start bg-gray-300">
-          <Link 
-          className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5"
-          to="/dashboard"
-          >Dashboard</Link>
-          <Link
-          className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5"
-          to="/results"
-          >Results</Link>
-          {/* {user?.role === "teacher" && ( */}
-            <Link 
-            className="px-4 text-black transition duration-200 rounded cursor-pointer hover:text-sky-700 hover:border hover:border-black hover:shadow-md hover:-translate-x-0.5"
-            to="/add-quiz"
-            >Add Quiz</Link>
-           {/* )} */}
-        </div>
-        )}
+        
 
         {/* Top Navbar */}
         <div className="flex items-center justify-between p-4 bg-white shadow">
