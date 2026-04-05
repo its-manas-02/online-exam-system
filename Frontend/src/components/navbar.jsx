@@ -1,14 +1,19 @@
 // Frontend/src/components/Navbar
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink , useNavigate } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faCircleUser, faXmark } from '@fortawesome/free-solid-svg-icons'
 
 export default function Navbar() {
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
+  const [user, setUser] = React.useState(null);
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
-  const [islogin, setIsLogin] = React.useState(false)
   React.useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') {
@@ -28,36 +33,34 @@ export default function Navbar() {
     setIsSidebarOpen(false)
   }
 
- const linkClassName = ({ isActive }) =>
-  `block rounded-md px-3 py-2 text-lg transition duration-200 ${
-    isActive
-      ? 'bg-blue-100 text-blue-800'
-      : 'hover:bg-gray-100 hover:pl-4'
-  }`
-
   return (
     <>
       <div className='flex items-center justify-between px-2 text-white bg-blue-700 text-2 xl'>
         <div className='cursor-pointer' onClick={handelclick}>
           <FontAwesomeIcon icon={faBars} />
         </div>
-        {/* <div className='cursor-pointer' onClick={() => setIsLogin(!islogin)}>
-          <FontAwesomeIcon icon={faCircleUser} />
-        </div> */}
         <div>
           <div className="flex items-center gap-4">
-            <span>{user.username}</span>
-
-            <button
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                window.location.href = "/login";
-              }}
-              className="px-2 py-1 text-white bg-red-500 rounded"
-            >
-              Logout
-            </button>
+            {user ? (
+              <>
+                <span>{user.username}</span>
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("user");
+                    navigate("/login");
+                  }}
+                  className="px-2 py-1 text-white bg-red-500 rounded"
+                >Logout</button>
+              </>
+            ) : (
+              <NavLink
+                to="/login"
+                className="px-2 py-1 text-white bg-green-500 rounded"
+              >
+                Login
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
