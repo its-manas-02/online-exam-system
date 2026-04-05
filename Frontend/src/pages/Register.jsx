@@ -3,15 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import bgImage from "../assets/bg.jpg"
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   React.useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/dashboard");
     }
-  }, []);
+  }, [navigate]);
     
   const [form, setForm] = React.useState({
     username: "",
@@ -63,7 +65,7 @@ function Register() {
       }
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      login(data.user);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       
@@ -165,6 +167,7 @@ export default Register
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 // import Register from './Register';
+import Login from './Login';
 
 // function Register() {
 //   const [isLogin, setIsLogin] = React.useState(true);

@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 export default function Dashboard() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
-    // const user = JSON.parse(localStorage.getItem("user")) || {
-    //     username: "User",
-    //     };
     
   return (
     <div className="flex min-h-screen bg-gray-100">

@@ -3,15 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import bgImage from "../assets/bg.jpg"
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   React.useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       navigate("/dashboard");
     }
-  }, []);
+  }, [navigate]);
 
   const [form, setForm] = React.useState({
     key:"",
@@ -48,7 +50,7 @@ export default function Login() {
       }
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      login(data.user);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       // console.log("Success:", data);
