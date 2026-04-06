@@ -2,12 +2,10 @@
 import React from 'react'
 import { NavLink , useNavigate , Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faCircleUser, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from "../context/AuthContext";
   
 export default function Navbar() {
-  // const storedUser = localStorage.getItem("user");
-  // const user = storedUser ? JSON.parse(storedUser) : null;
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
@@ -43,13 +41,10 @@ export default function Navbar() {
             {user ? (
               <>
                 <span>{user.username}</span>
-                <button
-                  onClick={() => {
+                <button onClick={() => {
                     logout();
                     navigate("/login");
-                  }}
-                  className="px-2 py-1 text-white bg-red-500 rounded"
-                >Logout</button>
+                  }} className="px-2 py-1 text-white bg-red-500 rounded">Logout</button>
               </>
             ) : (
               <NavLink
