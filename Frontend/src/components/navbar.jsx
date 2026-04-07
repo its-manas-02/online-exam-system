@@ -9,6 +9,8 @@ export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
+  const [openMenu, setOpenMenu] = React.useState(false);
+  const menuRef = React.useRef();
   React.useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === 'Escape') {
@@ -18,7 +20,17 @@ export default function Navbar() {
 
     window.addEventListener('keydown', handleEsc)
     return () => window.removeEventListener('keydown', handleEsc)
-  }, [])
+  }, []);
+  React.useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpenMenu(false);
+      }
+    };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => document.removeEventListener("mousedown", handleClickOutside);
+}, []);
 
   function handelclick() {
     setIsSidebarOpen(prev => !prev)
@@ -36,26 +48,37 @@ export default function Navbar() {
           <FontAwesomeIcon icon={faBars} />
         </div>
         
-        <div>
-          <div className="flex items-center gap-4">
-            {user ? (
-              <>
-                <span>{user.username}</span>
-                <button onClick={() => {
-                    logout();
-                    navigate("/login");
-                  }} className="px-2 py-1 text-white bg-red-500 rounded">Logout</button>
-              </>
-            ) : (
-              <NavLink
-                to="/login"
-                className="px-2 py-1 text-white bg-green-500 rounded"
-              >
-                Login
-              </NavLink>
-            )}
+<div>
+  <div className="flex items-center gap-4">
+    {user ? (
+      <div className='relative' ref={menuRef}>
+        <span className='cursor-pointer' onClick={() => setOpenMenu(prev => !prev)}>{user.username}</span>
+        
+        {openMenu && (
+          <div className="absolute right-0 w-40 mt-2 text-black bg-white rounded shadow-lg">
+            <div onClick={() => {
+                setOpenMenu(false);
+                navigate("/profile");
+              }} className="px-4 py-2 cursor-pointer hover:bg-gray-100">
+              Profile
+            </div>
+
+            <div onClick={() => {
+                logout();
+                navigate("/login");
+              }} className="px-4 py-2 cursor-pointer hover:bg-gray-100">
+              Logout
+            </div>
           </div>
-        </div>
+        )}
+      </div>
+    ) : (
+      <NavLink to="/login" className="px-2 py-1 text-white bg-green-500 rounded">
+        Login
+      </NavLink>
+    )}
+  </div>
+</div>
       </div>
 
       {/* Secondary Menu */}
