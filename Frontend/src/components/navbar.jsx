@@ -39,7 +39,8 @@ export default function Navbar() {
   function closeSidebar() {
     setIsSidebarOpen(false)
   }
-
+const colors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-red-500"];
+const color = colors[user?.username?.charCodeAt(0) % colors.length];
   return (
     <>
       {/* Top Navbar */}
@@ -52,13 +53,15 @@ export default function Navbar() {
   <div className="flex items-center gap-4">
     {user ? (
       <div className='relative' ref={menuRef}>
-        <span className='cursor-pointer' onClick={() => setOpenMenu(prev => !prev)}>{user.username}</span>
+        <span className={`flex items-center justify-center w-10 h-10 text-white rounded-full cursor-pointer ${color}`} onClick={() => setOpenMenu(prev => !prev)}>
+          {user?.username?.charAt(0).toUpperCase()}
+        </span>
         
         {openMenu && (
           <div className="absolute right-0 w-40 mt-2 text-black bg-white rounded shadow-lg">
             <div onClick={() => {
                 setOpenMenu(false);
-                navigate("/profile");
+                navigate("user/profile");
               }} className="px-4 py-2 cursor-pointer hover:bg-gray-100">
               Profile
             </div>
