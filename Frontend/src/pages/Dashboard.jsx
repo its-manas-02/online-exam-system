@@ -20,27 +20,6 @@ export default function Dashboard() {
 
       {/* Main */}
       <div className="flex-1">
-        
-
-        {/* Top Navbar */}
-        <div className="flex items-center justify-between p-4 bg-white shadow">
-          <h1 className="text-lg font-semibold">Dashboard</h1>
-
-          <div className="flex items-center gap-4">
-            <span>{user.username}</span>
-
-            <button
-              onClick={() => {
-                localStorage.removeItem("token");
-                localStorage.removeItem("user");
-                window.location.href = "/login";
-              }}
-              className="px-3 py-1 text-white bg-red-500 rounded"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
 
         {/* Content */}
         <div className="p-6">
