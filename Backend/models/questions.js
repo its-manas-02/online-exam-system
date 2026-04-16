@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const questionSchema = new mongoose.Schema({
-  topic: {
+  quiz: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Topic",
+    ref: "Quiz",
     required: true,
   },
 
@@ -17,7 +17,7 @@ const questionSchema = new mongoose.Schema({
     type: [String],
     required: true,
     validate: {
-      validator: (arr) => arr.length === 4,
+      validator: (arr) => arr.length === 4 && arr.every(o => o.trim() !== ""),
       message: "Exactly 4 options are required",
     },
   },

@@ -1,5 +1,6 @@
-import Topic from "../models/topic.js";
-import Question from "../models/questions.js";
+import Topic from "../models/Topic.js";
+import Question from "../models/Questions.js";
+import Quiz from "../models/Quiz.js";
 
 export const addQuiz = async (req, res) => {
   try {
