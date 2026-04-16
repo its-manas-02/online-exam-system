@@ -40,7 +40,9 @@ export default function Navbar() {
     setIsSidebarOpen(false)
   }
 const colors = ["bg-blue-500", "bg-green-500", "bg-purple-500", "bg-red-500"];
-const color = colors[user?.username?.charCodeAt(0) % colors.length];
+const color = user?.username
+  ? colors[user.username.charCodeAt(0) % colors.length]
+  : "bg-gray-500";
   return (
     <>
       {/* Top Navbar */}

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Addquiz() {
   const navigate = useNavigate();
+  const token = localStorage.getItem("token");
   const questions = Array.from({ length: 2 });
   
   const [form, setForm] = React.useState({
@@ -61,7 +62,7 @@ export default function Addquiz() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization : token,
+          Authorization : `Bearer ${token}`,
         },
         body: JSON.stringify(form),
       });
