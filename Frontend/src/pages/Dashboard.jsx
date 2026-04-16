@@ -19,38 +19,19 @@ export default function Dashboard() {
       )}
 
       {/* Main */}
-      <div className="flex-1">
-
-        {/* Content */}
-        <div className="p-6">
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      <div className="flex-1 min-h-screen p-6 bg-gray-100">
+        {/* {user?.role === "student" && ( */}
+          <div className="max-w-5xl p-6 mx-auto bg-white shadow-lg rounded-xl">
             
-            <div className="p-5 bg-white rounded shadow">
-              <h3 className="text-gray-500">Users</h3>
-              <p className="text-2xl font-bold">120</p>
-            </div>
+            <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Test Topics</h2>
 
-            <div className="p-5 bg-white rounded shadow">
-              <h3 className="text-gray-500">Orders</h3>
-              <p className="text-2xl font-bold">75</p>
+            <div className="p-4 transition border rounded-lg">
+              <h2>gkfwkfkw</h2>
+              <h1>jbhnjj</h1>
             </div>
-
-            <div className="p-5 bg-white rounded shadow">
-              <h3 className="text-gray-500">Revenue</h3>
-              <p className="text-2xl font-bold">₹12,500</p>
-            </div>
-
           </div>
-
-          {/* Extra Section */}
-          <div className="p-5 mt-6 bg-white rounded shadow">
-            <h2 className="mb-2 text-lg font-semibold">Welcome</h2>
-            <p>This is your dashboard. You are successfully logged in.</p>
-          </div>
-
-        </div>
+         {/* )} */}
+        
       </div>
     </div>
   ); 
