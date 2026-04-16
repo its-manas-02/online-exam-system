@@ -12,6 +12,12 @@ const quizSchema = new mongoose.Schema({
     required: true,
   },
 
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",   // 👈 link to user
+    required: true,
+  },
+
 }, { timestamps: true });
 
 export default mongoose.model("Quiz", quizSchema);
