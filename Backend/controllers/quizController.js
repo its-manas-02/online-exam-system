@@ -4,7 +4,7 @@ import Question from "../models/Question.js";
 
 export const addQuiz = async (req, res) => {
   try {
-    const { topic, title, questions } = req.body;
+    const { topic, questions } = req.body;
     const generateSlug = (text) => {
       return text
         .toLowerCase()
@@ -12,10 +12,47 @@ export const addQuiz = async (req, res) => {
         .replace(/\s+/g, "-")     // spaces → -
         .replace(/[^\w-]+/g, ""); // remove special chars
     };
+    const formatTopic = (text) => {
+      return text
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+    };
+    const formatTitle = (text) => {
+      return text
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+    };
+
+    let fixedTopic = formatTopic(topic);
 
     if (!topic) {
       return res.status(400).json({ message: "Topic is required" });
     }
+
+    // 1. Find or create topic
+    let existingTopic = await Topic.findOne({ name: { $regex: `^${fixedTopic}$`, $options: "i" } });
+
+    if (!existingTopic) {
+      const slug = generateSlug(fixedTopic);
+      let count = 1;
+
+      while (await Topic.findOne({ slug })) {
+        slug = `${generateSlug(fixedTopic)}-${count++}`;
+      }
+
+      existingTopic = new Topic({ name: fixedTopic, slug });
+      await existingTopic.save();
+    }
+
+    // 🔥 Auto numbering
+    const count = await Quiz.countDocuments({ topic: existingTopic._id });
+    const title = `${existingTopic.name} Test ${count + 1}`;
+
+    let fixedTitle = formatTitle(title);
 
     if (!title) {
       return res.status(400).json({ message: "Title is required" });
@@ -25,25 +62,9 @@ export const addQuiz = async (req, res) => {
       return res.status(400).json({ message: "Questions required" });
     }
 
-
-    // 1. Find or create topic
-    let existingTopic = await Topic.findOne({ name: { $regex: `^${topic}$`, $options: "i" } });
-
-    if (!existingTopic) {
-      const slug = generateSlug(topic);
-      let count = 1;
-
-      while (await Topic.findOne({ slug })) {
-        slug = `${generateSlug(topic)}-${count++}`;
-      }
-
-      existingTopic = new Topic({ name: topic, slug });
-      await existingTopic.save();
-    }
-
     // 2. Create quiz
     const newQuiz = new Quiz({
-      title,
+      title: fixedTitle,
       topic: existingTopic._id,
       createdBy: req.user.id,
     });
