@@ -1,8 +1,17 @@
 import React from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
+  const [topics, setTopics] = React.useState([]);
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    fetch("http://localhost:5000/api/topics")
+      .then(res => res.json())
+      .then(data => setTopics(data))
+      .catch(err => console.error(err));
+  }, []);
     
   return (
     <div className="flex min-h-screen bg-gray-100">

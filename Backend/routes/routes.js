@@ -4,6 +4,7 @@ import { register,login } from "../controllers/authController.js";
 import { addQuiz } from "../controllers/quizController.js";
 import { protect } from "../middleware/auth.js";
 
+
 const router = express.Router();
 
 // AUTH
