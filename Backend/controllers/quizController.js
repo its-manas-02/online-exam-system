@@ -20,11 +20,11 @@ export const addQuiz = async (req, res) => {
 
 
     // 1. Find or create topic
-    let existingTopic = await Topic.findOne({ name: topic });
+    let existingTopic = await Topic.findOne({ name: { $regex: `^${topic}$`, $options: "i" } });
 
     if (!existingTopic) {
       existingTopic = new Topic({ name: topic });
-      await existingTopic.save();
+      // await existingTopic.save();
     }
 
     // 2. Create quiz

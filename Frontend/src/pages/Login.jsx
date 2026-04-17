@@ -53,7 +53,7 @@ export default function Login() {
       login(data.user);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
-      // console.log("Success:", data);
+      console.log("Success:", data);
       setError(""); // clear error
     } catch (err) {
       setError(err.message);

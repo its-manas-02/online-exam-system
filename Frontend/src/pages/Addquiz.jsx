@@ -8,6 +8,7 @@ export default function Addquiz() {
   
   const [form, setForm] = React.useState({
     topic: "",
+    title: "",
     questions: Array.from({ length: 2 }, () => ({
         question: "",
         options: ["", "", "", ""],
@@ -26,6 +27,12 @@ export default function Addquiz() {
     // Topic
     if (name === "topic") {
       setForm({ ...form, topic: value });
+      return;
+    }
+
+    //Title
+    if (name === "title") {
+      setForm({ ...form, title: value });
       return;
     }
 
@@ -114,6 +121,21 @@ export default function Addquiz() {
             />
             </div>
 
+            {/* Title Input */}
+            <div className="mb-6">
+            <label className="block mb-1 font-medium text-gray-700">
+                Title
+            </label>
+            <input
+                type="text"
+                name="title"
+                onChange={handleChange}
+                placeholder="Enter title..."
+                className="w-full px-3 py-2 border rounded-md outline-none focus:ring-2 focus:ring-blue-500"
+                required
+            />
+            </div>
+            
             {/* Questions */}
             <div className="space-y-6 max-h-[65vh] overflow-y-auto pr-2">
             {questions.map((_, i) => (
