@@ -5,6 +5,13 @@ import Question from "../models/Question.js";
 export const addQuiz = async (req, res) => {
   try {
     const { topic, title, questions } = req.body;
+    const generateSlug = (text) => {
+      return text
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, "-")     // spaces → -
+        .replace(/[^\w-]+/g, ""); // remove special chars
+    };
 
     if (!topic) {
       return res.status(400).json({ message: "Topic is required" });
@@ -23,8 +30,15 @@ export const addQuiz = async (req, res) => {
     let existingTopic = await Topic.findOne({ name: { $regex: `^${topic}$`, $options: "i" } });
 
     if (!existingTopic) {
-      existingTopic = new Topic({ name: topic });
-      // await existingTopic.save();
+      const slug = generateSlug(topic);
+      let count = 1;
+
+      while (await Topic.findOne({ slug })) {
+        slug = `${generateSlug(topic)}-${count++}`;
+      }
+
+      existingTopic = new Topic({ name: topic, slug });
+      await existingTopic.save();
     }
 
     // 2. Create quiz

@@ -9,6 +9,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import Result from "../pages/Result";
 import Ranking from "../pages/Ranking";
 import Profile from './../pages/Profile';
+import TopicPage from "../pages/TopicPage";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +70,11 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+
+      {
+        path: "topic/:slug",
+        element: <TopicPage />
+      }
     ],
   },
 ]);

@@ -34,9 +34,14 @@ export default function Dashboard() {
             
             <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Test Topics</h2>
 
-            <div className="p-4 transition border rounded-lg">
-              <h2>gkfwkfkw</h2>
-              <h1>jbhnjj</h1>
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+              {topics.map((topic) => (
+                <div
+                  key={topic._id}
+                  onClick={() => navigate(`/topic/${topic.slug}`)}
+                  className="p-6 text-center transition bg-white shadow-md cursor-pointer rounded-xl hover:shadow-lg"
+                >{topic.name}</div>
+              ))}
             </div>
           </div>
          {/* )} */}
