@@ -6,9 +6,18 @@ export const addQuiz = async (req, res) => {
   try {
     const { topic, title, questions } = req.body;
 
-    if (!topic || !title || !questions.length) {
-      return res.status(400).json({ message: "Missing data" });
+    if (!topic) {
+      return res.status(400).json({ message: "Topic is required" });
     }
+
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
+
+    if (!questions || questions.length === 0) {
+      return res.status(400).json({ message: "Questions required" });
+    }
+
 
     // 1. Find or create topic
     let existingTopic = await Topic.findOne({ name: topic });
@@ -22,6 +31,7 @@ export const addQuiz = async (req, res) => {
     const newQuiz = new Quiz({
       title,
       topic: existingTopic._id,
+      createdBy: req.user.id,
     });
 
     await newQuiz.save();
