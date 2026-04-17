@@ -4,6 +4,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import bgImage from "../assets/bg.jpg"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import API from '../config/api';
 
 function Register() {
   const navigate = useNavigate();
@@ -50,7 +51,7 @@ function Register() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/register", {
+      const response = await fetch(`${API}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

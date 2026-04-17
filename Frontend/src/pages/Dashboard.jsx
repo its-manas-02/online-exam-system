@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from 'react-router-dom';
+import API from "../config/api";
 
 export default function Dashboard() {
   const storedUser = localStorage.getItem("user");
@@ -7,7 +8,7 @@ export default function Dashboard() {
   const [topics, setTopics] = React.useState([]);
   const navigate = useNavigate();
   React.useEffect(() => {
-    fetch("http://localhost:5000/api/topics")
+    fetch(`${API}/topics`)
       .then(res => res.json())
       .then(data => setTopics(data))
       .catch(err => console.error(err));

@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
+import API from "../config/api";
 
 export default function TopicPage() {
   const { slug } = useParams();
@@ -7,7 +8,7 @@ export default function TopicPage() {
   const [quizzes, setQuizzes] = React.useState([]);
 
   React.useEffect(() => {
-    fetch(`http://localhost:5000/api/quiz/topic/${slug}`)
+    fetch(`${API}/quiz/topic/${slug}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -25,11 +26,15 @@ export default function TopicPage() {
     <div className="p-6">
       <h2 className="mb-4 text-xl font-bold">Quizzes</h2>
 
-      {quizzes.map((quiz) => (
-        <div key={quiz._id} className="p-4 mb-3 bg-white rounded shadow">
-          {quiz.title}
-        </div>
-      ))}
+      {quizzes.length === 0 ? (
+        <p>No quizzes found</p>
+      ) : (
+        quizzes.map((quiz) => (
+          <div key={quiz._id} className="p-4 mb-3 bg-white rounded shadow">
+            {quiz.title}
+          </div>
+        ))
+      )}
     </div>
   );
 }

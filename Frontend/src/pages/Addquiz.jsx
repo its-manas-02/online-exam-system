@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
+import API from '../config/api';
 
 export default function Addquiz() {
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ export default function Addquiz() {
 
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5000/api/addquiz", {
+      const response = await fetch(`${API}/addquiz`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
