@@ -59,7 +59,12 @@ function Register() {
         body: JSON.stringify(form),
       });
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error("Server did not return valid JSON");
+      }
 
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong");
