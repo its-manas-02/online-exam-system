@@ -7,8 +7,9 @@ export default function QuizPage() {
   const [questions, setQuestions] = React.useState([]);
 
   React.useEffect(() => {
-    API.get(`/quiz/${quizId}/questions`)
-      .then((res) => setQuestions(res.data))
+    fetch(`${API}/quiz/${quizId}/questions`)
+      .then((res) => res.json())
+      .then((data) => setQuestions(data))
       .catch((err) => console.error(err));
   }, [quizId]);
 

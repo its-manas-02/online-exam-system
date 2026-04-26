@@ -7,7 +7,6 @@ export default function TopicPage() {
   const navigate = useNavigate();
   console.log(slug);
   const [quizzes, setQuizzes] = React.useState([]);
-
   React.useEffect(() => {
     fetch(`${API}/quiz/topic/${slug}`)
       .then(res => res.json())
@@ -34,7 +33,7 @@ export default function TopicPage() {
           <div 
             key={quiz._id} 
             className="p-4 mb-3 bg-white rounded shadow" 
-            onClick={() => navigate(`/quiz/${quiz._id}`)}>
+            onClick={() => navigate(`/topic/${slug}/quiz/${quiz._id}`)}>
             {quiz.title}
           </div>
         ))
