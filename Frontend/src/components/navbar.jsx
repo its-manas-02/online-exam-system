@@ -4,6 +4,7 @@ import { NavLink , useNavigate , Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
 import { useAuth } from "../context/AuthContext";
+import Dashboard from './../pages/Dashboard';
   
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -116,7 +117,7 @@ const color = user?.username
         </div>
 
         <nav className='space-y-2'>
-          <NavLink to='/' className={({ isActive }) => `block rounded-md px-3 py-2 text-lg transition duration-200 ${ isActive ? 'bg-blue-100 text-blue-800 shadow' : 'hover:bg-gray-100 hover:shadow-md' }` } onClick={closeSidebar} >Home</NavLink>
+          <NavLink to='/Dashboard' className={({ isActive }) => `block rounded-md px-3 py-2 text-lg transition duration-200 ${ isActive ? 'bg-blue-100 text-blue-800 shadow' : 'hover:bg-gray-100 hover:shadow-md' }` } onClick={closeSidebar} >Home</NavLink>
           <NavLink to='/about' className={({ isActive }) => `block rounded-md px-3 py-2 text-lg transition duration-200 ${ isActive ? 'bg-blue-100 text-blue-800 shadow' : 'hover:bg-gray-100 hover:shadow-md' }` } onClick={closeSidebar} >About</NavLink>
           <NavLink to='/support' className={({ isActive }) => `block rounded-md px-3 py-2 text-lg transition duration-200 ${ isActive ? 'bg-blue-100 text-blue-800 shadow' : 'hover:bg-gray-100 hover:shadow-md' }` } onClick={closeSidebar} >Support</NavLink>
         </nav>

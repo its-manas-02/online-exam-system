@@ -33,7 +33,7 @@ router.get("/quiz/topic/:slug", async (req, res) => {
       return res.status(404).json({ message: "Topic not found" });
     }
 
-    const quizzes = await Quiz.find({ topic: req.params.slug });
+    const quizzes = await Quiz.find({ topic: topic._id });
     res.json(quizzes);
   } catch (error) {
     res.status(500).json({ message: error.message });

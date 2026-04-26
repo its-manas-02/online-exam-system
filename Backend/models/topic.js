@@ -8,17 +8,12 @@ const topicSchema = new mongoose.Schema({
   },
   slug: {
     type: String, 
-    unique: true 
+    unique: true,
+    lowercase: true,
   },
 
   description: String,
 
 }, { timestamps: true });
-
-// auto-generate slug
-// topicSchema.pre("save", function (next) {
-//   this.slug = this.name.toLowerCase().replace(/\s+/g, "-");
-//   next();
-// });
 
 export default mongoose.model("Topic", topicSchema);

@@ -4,7 +4,7 @@ import Question from "../models/Question.js";
 
 export const addQuiz = async (req, res) => {
   try {
-    const { topic, questions } = req.body;
+    const { topic, title, questions } = req.body;
     const generateSlug = (text) => {
       return text
         .toLowerCase()
@@ -50,7 +50,7 @@ export const addQuiz = async (req, res) => {
 
     // 🔥 Auto numbering
     const count = await Quiz.countDocuments({ topic: existingTopic._id });
-    const title = `${existingTopic.name} Test ${count + 1}`;
+    // const title = `${existingTopic.name} Test ${count + 1}`;
 
     let fixedTitle = formatTitle(title);
 
