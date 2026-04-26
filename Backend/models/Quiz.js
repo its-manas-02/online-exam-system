@@ -5,6 +5,12 @@ const quizSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  
+  slug: {
+    type: String, 
+    unique: true,
+    lowercase: true,
+  },
 
   topic: {
     type: mongoose.Schema.Types.ObjectId,

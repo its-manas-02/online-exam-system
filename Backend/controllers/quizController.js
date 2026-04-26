@@ -5,73 +5,86 @@ import Question from "../models/Question.js";
 export const addQuiz = async (req, res) => {
   try {
     const { topic, title, questions } = req.body;
+
+    // Helper Functions
     const generateSlug = (text) => {
       return text
         .toLowerCase()
         .trim()
-        .replace(/\s+/g, "-")     // spaces → -
-        .replace(/[^\w-]+/g, ""); // remove special chars
+        .replace(/\s+/g, "-")
+        .replace(/[^\w-]+/g, "");
     };
-    const formatTopic = (text) => {
+
+    const formatText = (text) => {
       return text
         .trim()
         .toLowerCase()
         .replace(/\s+/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
-    };
-    const formatTitle = (text) => {
-      return text
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ")
-        .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+        .replace(/\b\w/g, (char) => char.toUpperCase());
     };
 
-    let fixedTopic = formatTopic(topic);
-
-    if (!topic) {
-      return res.status(400).json({ message: "Topic is required" });
+    if (!topic) return res.status(400).json({ message: "Topic is required" });
+    if (!title) return res.status(400).json({ message: "Title is required" });
+    if (!questions || questions.length === 0) {
+      return res.status(400).json({ message: "Questions are required" });
     }
 
-    // 1. Find or create topic
-    let existingTopic = await Topic.findOne({ name: { $regex: `^${fixedTopic}$`, $options: "i" } });
+    const fixedTopic = formatText(topic);
+    const baseTitle = formatText(title);
+
+    // 1. Find or Create Topic
+    let existingTopic = await Topic.findOne({ 
+      name: { $regex: `^${fixedTopic}$`, $options: "i" } 
+    });
 
     if (!existingTopic) {
-      const slug = generateSlug(fixedTopic);
+      let topicSlug = generateSlug(fixedTopic);
       let count = 1;
 
-      while (await Topic.findOne({ slug })) {
-        slug = `${generateSlug(fixedTopic)}-${count++}`;
+      while (await Topic.findOne({ slug: topicSlug })) {
+        topicSlug = `${generateSlug(fixedTopic)}-${count++}`;
       }
 
-      existingTopic = new Topic({ name: fixedTopic, slug });
+      existingTopic = new Topic({ name: fixedTopic, slug: topicSlug });
       await existingTopic.save();
     }
 
-    // 🔥 Auto numbering
-    const count = await Quiz.countDocuments({ topic: existingTopic._id });
-    // const title = `${existingTopic.name} Test ${count + 1}`;
+    // 2. Handle Duplicate Title with Numbering
+    let finalTitle = baseTitle;
+    let counter = 1;
 
-    let fixedTitle = formatTitle(title);
-
-    if (!title) {
-      return res.status(400).json({ message: "Title is required" });
+    // Check if title already exists for this topic
+    while (await Quiz.exists({ 
+      topic: existingTopic._id, 
+      title: finalTitle 
+    })) {
+      counter++;
+      finalTitle = `${baseTitle} ${counter}`;
     }
 
-    if (!questions || questions.length === 0) {
-      return res.status(400).json({ message: "Questions required" });
+    // 3. Generate Slug for Quiz (based on finalTitle)
+    let quizSlug = generateSlug(finalTitle);
+    let slugCounter = 1;
+
+    while (await Quiz.exists({ 
+      topic: existingTopic._id, 
+      slug: quizSlug 
+    })) {
+      slugCounter++;
+      quizSlug = `${generateSlug(baseTitle)}-${slugCounter}`;
     }
 
-    // 2. Create quiz
+    // 4. Create Quiz with finalTitle and slug
     const newQuiz = new Quiz({
-      title: fixedTitle,
+      title: finalTitle,
+      slug: quizSlug,           // ← Added slug field
       topic: existingTopic._id,
       createdBy: req.user.id,
     });
 
     await newQuiz.save();
 
-    // 3. Save questions
+    // 5. Save Questions
     const formattedQuestions = questions.map((q) => ({
       quiz: newQuiz._id,
       question: q.question,
@@ -84,9 +97,12 @@ export const addQuiz = async (req, res) => {
     res.status(201).json({
       message: "Quiz created successfully",
       quizId: newQuiz._id,
+      slug: newQuiz.slug,
+      title: newQuiz.title,
     });
 
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error.message });
   }
 };
