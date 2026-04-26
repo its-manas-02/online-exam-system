@@ -5,6 +5,7 @@ import { addQuiz } from "../controllers/quizController.js";
 import { protect } from "../middleware/auth.js";
 import Topic from "../models/Topic.js";
 import Quiz from "../models/Quiz.js";
+import Question from "../models/Question.js";
 
 const router = express.Router();
 
@@ -35,6 +36,16 @@ router.get("/quiz/topic/:slug", async (req, res) => {
 
     const quizzes = await Quiz.find({ topic: topic._id });
     res.json(quizzes);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.get("/quiz/:quizId/questions", async (req, res) => {
+  try {
+    const questions = await Question.find({ quiz: req.params.quizId });
+
+    res.json(questions);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

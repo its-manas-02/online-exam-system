@@ -10,6 +10,7 @@ import Result from "../pages/Result";
 import Ranking from "../pages/Ranking";
 import Profile from './../pages/Profile';
 import TopicPage from "../pages/TopicPage";
+import QuizPage from "../pages/QuizPage";
 
 const router = createBrowserRouter([
   {
@@ -73,8 +74,14 @@ const router = createBrowserRouter([
 
       {
         path: "topic/:slug",
-        element: <TopicPage />
-      }
+        element: <TopicPage />,
+        children:[
+          {
+            path: "quiz/:quizId",
+            element: <QuizPage />,
+          },
+        ],
+      },
     ],
   },
 ]);

@@ -1,9 +1,10 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useNavigate, Outlet } from "react-router-dom";
 import API from "../config/api";
 
 export default function TopicPage() {
   const { slug } = useParams();
+  const navigate = useNavigate();
   console.log(slug);
   const [quizzes, setQuizzes] = React.useState([]);
 
@@ -30,11 +31,15 @@ export default function TopicPage() {
         <p>No quizzes found</p>
       ) : (
         quizzes.map((quiz) => (
-          <div key={quiz._id} className="p-4 mb-3 bg-white rounded shadow">
+          <div 
+            key={quiz._id} 
+            className="p-4 mb-3 bg-white rounded shadow" 
+            onClick={() => navigate(`/quiz/${quiz._id}`)}>
             {quiz.title}
           </div>
         ))
       )}
+      <Outlet />
     </div>
   );
 }
