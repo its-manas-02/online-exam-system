@@ -82,8 +82,6 @@ online-exam-system/
 
 🚀 How It Works
 
-```
-
 textFrontend (React + Tailwind CSS)
         ↓ (API Calls using fetch/axios)
 Backend Routes (Express.js)
@@ -92,7 +90,6 @@ Controllers (Business Logic)
         ↓
 MongoDB Database (Mongoose)
 
-```
 ---
 
 🧩 Challenges Solved
