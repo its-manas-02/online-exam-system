@@ -55,7 +55,7 @@ online-exam-system/
 │
 ├── README.md
 └── .env.example
-
+```
 ---
 
 ⚙️ Features in Detail
@@ -82,7 +82,9 @@ online-exam-system/
 
 🚀 How It Works
 
-textFrontend (React + Tailwind CSS)
+```bash
+
+Frontend (React + Tailwind CSS)
         ↓ (API Calls using fetch/axios)
 Backend Routes (Express.js)
         ↓
@@ -90,6 +92,7 @@ Controllers (Business Logic)
         ↓
 MongoDB Database (Mongoose)
 
+```
 ---
 
 🧩 Challenges Solved
@@ -113,8 +116,8 @@ MongoDB Database (Mongoose)
 
 ---
 
-👨‍💻 Author
-Manas Ghosh
+## 👨‍💻 Author
+**Manas Ghosh**
 
 ---
 
