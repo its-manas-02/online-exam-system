@@ -6,6 +6,6 @@ const router = express.Router();
 
 // Mount all route groups
 router.use("/auth", authRoutes);     // → /auth/register, /auth/login
-router.use("/quiz", quizRoutes);     // → /quiz/topic/:slug, /quiz/:quizSlug, etc.
+router.use("/", quizRoutes);     // → /quiz/topic/:slug, /quiz/:quizSlug, etc.
 
 export default router;
