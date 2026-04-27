@@ -1,6 +1,6 @@
 // Backend/routes/routes.js
 import express from "express";
-import { register,login } from "../controllers/authController.js";
+import { register, login } from "../controllers/authController.js";
 import { addQuiz } from "../controllers/quizController.js";
 import { protect } from "../middleware/auth.js";
 import Topic from "../models/Topic.js";
@@ -9,14 +9,16 @@ import Question from "../models/Question.js";
 
 const router = express.Router();
 
-// AUTH
+// ====================== AUTH ======================
 router.post("/register", register);
 router.post("/login", login);
 
-// QUIZ
+// ====================== QUIZ ======================
+
+// Add new quiz (protected)
 router.post("/addquiz", protect, addQuiz);
 
-// 🔥 GET ALL TOPICS
+// Get all topics
 router.get("/topics", async (req, res) => {
   try {
     const topics = await Topic.find().sort({ createdAt: -1 });
@@ -26,7 +28,7 @@ router.get("/topics", async (req, res) => {
   }
 });
 
-// 🔥 GET QUIZZES BY TOPIC slug
+// 🔥 Get Quizzes by Topic Slug (existing - theek hai)
 router.get("/quiz/topic/:slug", async (req, res) => {
   try {
     const topic = await Topic.findOne({ slug: req.params.slug });
@@ -34,20 +36,38 @@ router.get("/quiz/topic/:slug", async (req, res) => {
       return res.status(404).json({ message: "Topic not found" });
     }
 
-    const quizzes = await Quiz.find({ topic: topic._id });
+    const quizzes = await Quiz.find({ topic: topic._id })
+      .select("title slug description")   // sirf zaroori fields
+      .sort({ createdAt: -1 });
+
     res.json(quizzes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get("/quiz/:quizId/questions", async (req, res) => {
+// 🔥 NEW: Get Single Quiz by Slug + Questions (Yeh sabse important hai)
+router.get("/quiz/:quizSlug", async (req, res) => {
   try {
-    const questions = await Question.find({ quiz: req.params.quizId });
+    const quiz = await Quiz.findOne({ slug: req.params.quizSlug })
+      .populate("topic", "name slug");   // topic ka naam bhi laane ke liye
 
-    res.json(questions);
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    // Questions fetch karo
+    const questions = await Question.find({ quiz: quiz._id })
+      .select("question options correctAnswer");   // sensitive fields mat bhejo
+
+    res.json({
+      ...quiz.toObject(),
+      questions: questions   // questions ko quiz ke saath attach kar diya
+    });
+
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: "Server error while fetching quiz" });
   }
 });
 

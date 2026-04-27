@@ -10,7 +10,6 @@ export default function TopicPage() {
   const [quizzes, setQuizzes] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Check kar rahe hain ki hum quiz page pe hain ya nahi
   const isQuizPage = location.pathname.includes("/quiz/");
 
   React.useEffect(() => {
@@ -31,6 +30,10 @@ export default function TopicPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  const handleQuizClick = (quiz) => {
+    navigate(`quiz/${quiz.slug}`);
+  };
+
   return (
     <div className="p-6">
       {!isQuizPage && (
@@ -47,7 +50,7 @@ export default function TopicPage() {
                 <div
                   key={quiz._id}
                   className="p-5 transition-all bg-white border shadow-sm cursor-pointer rounded-xl hover:shadow-md"
-                  onClick={() => navigate(`quiz/${quiz._id}`)}
+                  onClick={() => handleQuizClick(quiz)}
                 >
                   <h3 className="text-lg font-semibold">{quiz.title}</h3>
                   {quiz.description && (

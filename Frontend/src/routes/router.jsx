@@ -77,7 +77,7 @@ const router = createBrowserRouter([
         element: <TopicPage />,
         children:[
           {
-            path: "quiz/:quizId",
+            path: "quiz/:quizSlug",
             element: <QuizPage />,
           },
         ],
