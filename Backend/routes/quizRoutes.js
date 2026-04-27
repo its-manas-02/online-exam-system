@@ -1,6 +1,4 @@
-// Backend/routes/routes.js
 import express from "express";
-import { register, login } from "../controllers/authController.js";
 import { addQuiz } from "../controllers/quizController.js";
 import { protect } from "../middleware/auth.js";
 import Topic from "../models/Topic.js";
@@ -9,11 +7,7 @@ import Question from "../models/Question.js";
 
 const router = express.Router();
 
-// ====================== AUTH ======================
-router.post("/register", register);
-router.post("/login", login);
-
-// ====================== QUIZ ======================
+// ====================== QUIZ ROUTES ======================
 
 // Add new quiz (protected)
 router.post("/addquiz", protect, addQuiz);
@@ -28,7 +22,7 @@ router.get("/topics", async (req, res) => {
   }
 });
 
-// 🔥 Get Quizzes by Topic Slug (existing - theek hai)
+// Get Quizzes by Topic Slug
 router.get("/quiz/topic/:slug", async (req, res) => {
   try {
     const topic = await Topic.findOne({ slug: req.params.slug });
@@ -37,7 +31,7 @@ router.get("/quiz/topic/:slug", async (req, res) => {
     }
 
     const quizzes = await Quiz.find({ topic: topic._id })
-      .select("title slug description")   // sirf zaroori fields
+      .select("title slug description")
       .sort({ createdAt: -1 });
 
     res.json(quizzes);
@@ -46,27 +40,26 @@ router.get("/quiz/topic/:slug", async (req, res) => {
   }
 });
 
-// 🔥 NEW: Get Single Quiz by Slug + Questions (Yeh sabse important hai)
+// Get Single Quiz by Slug + Questions (Important)
 router.get("/quiz/:quizSlug", async (req, res) => {
   try {
     const quiz = await Quiz.findOne({ slug: req.params.quizSlug })
-      .populate("topic", "name slug");   // topic ka naam bhi laane ke liye
+      .populate("topic", "name slug");
 
     if (!quiz) {
       return res.status(404).json({ message: "Quiz not found" });
     }
 
-    // Questions fetch karo
     const questions = await Question.find({ quiz: quiz._id })
-      .select("question options correctAnswer");   // sensitive fields mat bhejo
+      .select("question options correctAnswer");
 
     res.json({
       ...quiz.toObject(),
-      questions: questions   // questions ko quiz ke saath attach kar diya
+      questions: questions
     });
 
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching quiz:", error);
     res.status(500).json({ message: "Server error while fetching quiz" });
   }
 });
