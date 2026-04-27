@@ -1,135 +1,132 @@
 # 🚀 Online Exam System (MERN Stack)
 
-A full-stack web application for conducting online exams with secure authentication and role-based access control. Built to simulate a real-world exam platform with scalable architecture and a clean, responsive UI.
+A full-stack web application for conducting online exams and quizzes with secure JWT authentication and role-based access control. Built to simulate a real-world exam platform with clean, responsive UI and scalable architecture.
 
 ---
 
-## 📂 Project Structure
+## ✨ Key Features
 
-```
-online-exam-system/
-│
-├── Backend/
-│   ├── config/            # Database configuration
-│   ├── controllers/       # Business logic (auth, quiz)
-│   ├── middleware/        # Auth & role middleware
-│   ├── models/            # Mongoose schemas (User, Question, Topic)
-│   ├── routes/            # API routes
-│   └── server.js          # Entry point
-│
-├── Frontend/
-│   ├── src/
-│   │   ├── components/    # Reusable UI (Navbar, ProtectedRoute)
-│   │   ├── pages/         # Pages (Home, Login, Dashboard, AddQuiz)
-│   │   ├── layouts/       # Layouts (MainLayout)
-│   │   ├── routes/        # Routing configuration
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   │
-│   └── index.html
-│
-└── README.md
-```
-
----
-
-## 🧠 Key Highlights
-
-* 🔐 JWT-based authentication (Login/Register)  
-* 👥 Role-based access control (Admin / Teacher / Student)  
-* 📝 Dynamic quiz creation with multiple questions and options  
-* 🧱 MVC backend architecture (controllers, routes, models)  
-* ⚛️ Structured React frontend with protected routes  
-* 🎨 Responsive UI using Tailwind CSS  
+- 🔐 **Secure JWT Authentication** – Register and Login
+- 👥 **Role-Based Access Control** – Admin, Teacher, and Student roles
+- 📝 **Dynamic Quiz Creation** – Create topics, quizzes with multiple questions
+- ❓ **Multiple Choice Questions** – Each question with 4 options and one correct answer
+- 🎨 **Modern Responsive UI** – Built with Tailwind CSS
+- 🛡️ **Protected Routes** – Secure frontend routing with React Router
+- 🧱 **MVC Architecture** – Clean and maintainable backend structure
 
 ---
 
 ## 🛠️ Tech Stack
 
-**Frontend**
+### Frontend
+- **React 18** (Vite)
+- **React Router DOM**
+- **Tailwind CSS**
 
-* React (Vite)  
-* React Router DOM  
-* Tailwind CSS  
-
-**Backend**
-
-* Node.js + Express  
-* MongoDB + Mongoose  
-* JWT Authentication  
-* bcryptjs  
+### Backend
+- **Node.js + Express**
+- **MongoDB + Mongoose**
+- **JWT Authentication**
+- **bcryptjs** – Password hashing
 
 ---
 
-## ⚙️ Features
+## 📂 Project Structure
 
-### 🔐 Authentication
-
-* Secure user registration & login  
-* Password hashing with bcrypt  
-* Token-based session handling  
-
-### 👨‍💼 Role-Based System
-
-* **Admin** → manage platform  
-* **Teacher** → create quizzes  
-* **Student** → attempt quizzes  
-
-### 📝 Quiz Module
-
-* Add quizzes by topic  
-* Each question has 4 options  
-* Correct answer selection  
-* Scalable question structure  
+```bash
+online-exam-system/
+├── Backend/
+│   ├── config/            # Database configuration
+│   ├── controllers/       # Business logic (authController, quizController)
+│   ├── middleware/        # Authentication & authorization middleware
+│   ├── models/            # Mongoose schemas (User, Topic, Quiz, Question)
+│   ├── routes/            # Modular route files (authRoutes, quizRoutes)
+│   └── server.js          # Server entry point
+│
+├── Frontend/
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Main pages (Login, TopicPage, QuizPage, etc.)
+│   │   ├── layouts/       # Layout components
+│   │   ├── routes/        # React Router configuration
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   └── index.html
+│
+├── README.md
+└── .env.example
 
 ---
 
-## 📈 Flow Diagram
+⚙️ Features in Detail
+🔐 Authentication
+
+* Secure user registration and login
+* Password hashing using bcryptjs
+* JWT token-based authentication
+
+👨‍💼 Role-Based System
+
+* Admin → Full platform management
+* Teacher → Create and manage quizzes
+* Student → Attempt quizzes
+
+📝 Quiz Module
+
+* Add quizzes under specific topics
+* Dynamic form to add multiple questions
+* Each question supports 4 options with correct answer selection
+* Proper separation of Topic, Quiz, and Question models
+
+---
+
+🚀 How It Works
 
 ```
-Frontend (React)
-   ↓
-API Calls (fetch)
-   ↓
-Backend Routes (Express)
-   ↓
+
+textFrontend (React + Tailwind CSS)
+        ↓ (API Calls using fetch/axios)
+Backend Routes (Express.js)
+        ↓
 Controllers (Business Logic)
-   ↓
-MongoDB (Database)
+        ↓
+MongoDB Database (Mongoose)
+
 ```
+---
+
+🧩 Challenges Solved
+
+* Handling dynamic forms for adding multiple questions at once
+* Implementing secure JWT authentication flow
+* Structuring scalable backend using MVC pattern
+* Managing nested routes and protected routes in React
+* Proper data modeling for Topics, Quizzes, and Questions
 
 ---
 
-## 🧩 Challenges Solved
+🛣️ Future Enhancements
 
-* Handling dynamic forms for multiple questions  
-* Implementing secure authentication with JWT  
-* Structuring a scalable backend using MVC  
-* Managing protected routes in React  
-
----
-
-## 🚀 Future Enhancements
-
-* 📊 Result & scoring system  
-* ⏱️ Timer-based exams  
-* 📈 Analytics dashboard  
-* 🧾 Quiz attempt history  
+* ⏱️ Timer-based exams with auto-submission
+* 📊 Real-time scoring and detailed result system
+* 🏆 Leaderboard and performance analytics
+* 📄 Certificate generation after completing quiz
+* 📈 Teacher analytics dashboard
+* 📋 Quiz attempt history for students
 
 ---
 
-## 👨‍💻 Author
-
-**Manas Ghosh**
+👨‍💻 Author
+Manas Ghosh
 
 ---
 
-## ⭐ Why This Project Matters
-
+⭐ Why This Project Matters
 This project demonstrates:
 
-* Full-stack development skills  
-* Real-world authentication flows  
-* Scalable, maintainable project structure  
-* Clean integration of frontend UI with backend logic
+Strong full-stack development skills using MERN stack
+Real-world authentication and authorization flows
+Dynamic form handling and complex state management
+Clean, maintainable, and scalable project architecture
+Seamless integration between React frontend and Express backend
 

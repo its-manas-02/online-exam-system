@@ -1,8 +1,8 @@
 // Frontend/src/components/Navbar
-import React from 'react'
-import { NavLink , useNavigate , Link } from 'react-router-dom'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons'
+import React from 'react';
+import { NavLink , useNavigate , Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "../context/AuthContext";
 import Dashboard from './../pages/Dashboard';
   

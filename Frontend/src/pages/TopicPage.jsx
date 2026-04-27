@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import API from "../config/api";
 
 export default function TopicPage() {
@@ -35,33 +36,37 @@ export default function TopicPage() {
   };
 
   return (
-    <div className="p-6">
-      {!isQuizPage && (
-        <>
-          <h2 className="mb-6 text-2xl font-bold">Quizzes</h2>
+    <div className="flex-1 min-h-screen p-6 bg-gray-100">
+      <div className="max-w-5xl p-6 mx-auto bg-white shadow-lg rounded-xl">
+        {!isQuizPage && (
+          <>
+            <h2 className="mb-6 text-2xl font-bold text-center text-gray-800">Quizzes</h2>
 
-          {loading ? (
-            <p>Loading quizzes...</p>
-          ) : quizzes.length === 0 ? (
-            <p>No quizzes found for "{slug}"</p>
-          ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {quizzes.map((quiz) => (
-                <div
-                  key={quiz._id}
-                  className="p-5 transition-all bg-white border shadow-sm cursor-pointer rounded-xl hover:shadow-md"
-                  onClick={() => handleQuizClick(quiz)}
-                >
-                  <h3 className="text-lg font-semibold">{quiz.title}</h3>
-                  {quiz.description && (
-                    <p className="mt-2 text-sm text-gray-600">{quiz.description}</p>
-                  )}
-                </div>
-              ))}
+            <div className="p-4 transition border rounded-lg bg-gray-50 hover:shadow-md">
+              {loading ? (
+                <p>Loading quizzes...</p>
+              ) : quizzes.length === 0 ? (
+                <p>No quizzes found for "{slug}"</p>
+              ) : (
+                  <div className="grid grid-cols-1 gap-4 ">
+                    {quizzes.map((quiz) => (
+                    <div
+                        key={quiz._id}
+                        className="p-5 transition-all bg-white border shadow-sm cursor-pointer rounded-xl hover:shadow-md"
+                        onClick={() => handleQuizClick(quiz)}
+                      >
+                        <h3 className="text-lg font-semibold">{quiz.title}</h3>
+                        {quiz.description && (
+                          <p className="mt-2 text-sm text-gray-600">{quiz.description}</p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+              )}
             </div>
-          )}
-        </>
-      )}
+          </>
+        )}
+      </div>
 
       {/* Quiz Page Content */}
       <Outlet />
