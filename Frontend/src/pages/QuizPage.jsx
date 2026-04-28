@@ -1,85 +1,131 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import API from "../config/api";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import API from '../config/api';
 
 
 export default function QuizPage() {
   const { quizSlug } = useParams();
+  
+  const [quiz, setQuiz] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  const [quizData, setQuizData] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        setLoading(true);
-        setError(null);
-
-        console.log("Fetching quiz with slug:", quizSlug); // ← Debug ke liye
-
-        const res = await fetch(`${API}/quiz/${quizSlug}`); 
-        // ↑↑↑↑ Apna exact backend URL yahan daal (API baseURL use kar raha hai toh usko use kar)
-
+        const res = await fetch(`${API}/quiz/${quizSlug}`);
         const data = await res.json();
 
-        console.log("API Response:", data);   // ← Yeh console mein dekh lena important hai
-
         if (res.ok) {
-          setQuizData(data);
+          setQuiz(data);
+          setQuestions(data.questions || []);
         } else {
-          setError(data.message || "Failed to load quiz");
+          console.error("Error:", data.message);
         }
-      } catch (err) {
-        console.error("Fetch Error:", err);
-        setError("Network error or server is down");
+      } catch (error) {
+        console.error("Failed to fetch quiz:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (quizSlug) {
-      fetchQuiz();
-    }
+    fetchQuiz();
   }, [quizSlug]);
 
-  if (loading) return <div className="p-10 text-lg text-center">Loading quiz...</div>;
-  
-  if (error) return <div className="p-10 text-center text-red-600">{error}</div>;
+  const handleOptionSelect = (questionId, option) => {
+    setSelectedAnswers(prev => ({
+      ...prev,
+      [questionId]: option
+    }));
+  };
 
-  if (!quizData) return <div className="p-10">Quiz not found</div>;
+  const goToNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(prev => prev + 1);
+    }
+  };
 
-  // Ab yahan questions safely nikaal rahe hain
-  const questions = quizData.questions || quizData; // agar direct array aa raha ho
+  const goToPrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(prev => prev - 1);
+    }
+  };
+
+  if (loading) return <div className="p-10 text-xl text-center">Loading quiz...</div>;
+  if (!quiz || questions.length === 0) {
+    return <div className="p-10 text-center text-red-600">Quiz not found or no questions available.</div>;
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div className="max-w-4xl p-6 mx-auto">
-      <h1 className="mb-2 text-3xl font-bold">{quizData.title || "Untitled Quiz"}</h1>
+    <div className="max-w-3xl p-6 mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">{quiz.title}</h1>
+        <p className="mt-2 text-gray-600">
+          Question {currentQuestionIndex + 1} of {questions.length}
+        </p>
+        
+        {/* Progress Bar */}
+        <div className="w-full h-2 mt-4 bg-gray-200 rounded-full">
+          <div 
+            className="h-2 transition-all duration-300 bg-blue-600 rounded-full"
+            style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+          />
+        </div>
+      </div>
 
-      {!Array.isArray(questions) || questions.length === 0 ? (
-        <p className="py-10 text-center text-gray-500">No questions available in this quiz.</p>
-      ) : (
-        <div className="mt-8 space-y-10">
-          {questions.map((q, index) => (
-            <div key={q._id || index} className="p-6 bg-white border shadow rounded-2xl">
-              <h3 className="mb-5 text-xl font-semibold">
-                Question {index + 1}: {q.question}
-              </h3>
+      {/* Question Card */}
+      <div className="p-8 bg-white shadow-lg rounded-2xl">
+        <h2 className="mb-6 text-xl font-semibold">
+          {currentQuestionIndex + 1}. {currentQuestion.question}
+        </h2>
 
-              <div className="grid gap-3">
-                {Array.isArray(q.options) && q.options.map((option, i) => (
-                  <div
-                    key={i}
-                    className="p-4 transition border cursor-pointer rounded-xl hover:bg-blue-50"
-                  >
-                    {option}
-                  </div>
-                ))}
-              </div>
+        <div className="space-y-4">
+          {currentQuestion.options && currentQuestion.options.map((option, index) => (
+            <div
+              key={index}
+              onClick={() => handleOptionSelect(currentQuestion._id, option)}
+              className={`p-5 border-2 rounded-xl cursor-pointer transition-all text-lg
+                ${selectedAnswers[currentQuestion._id] === option 
+                  ? 'border-blue-600 bg-blue-50' 
+                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
+            >
+              {option}
             </div>
           ))}
         </div>
-      )}
+      </div>
+
+      {/* Navigation Buttons */}
+      <div className="flex justify-between mt-8">
+        <button
+          onClick={goToPrevious}
+          disabled={currentQuestionIndex === 0}
+          className="px-6 py-3 font-medium transition bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-xl"
+        >
+          ← Previous
+        </button>
+
+        {currentQuestionIndex === questions.length - 1 ? (
+          <button 
+            className="px-8 py-3 font-medium text-white transition bg-green-600 hover:bg-green-700 rounded-xl"
+            onClick={() => alert("Quiz Submitted! (Feature coming soon)")}
+          >
+            Submit Quiz
+          </button>
+        ) : (
+          <button
+            onClick={goToNext}
+            className="px-8 py-3 font-medium text-white transition bg-blue-600 hover:bg-blue-700 rounded-xl"
+          >
+            Next →
+          </button>
+        )}
+      </div>
     </div>
   );
 }
