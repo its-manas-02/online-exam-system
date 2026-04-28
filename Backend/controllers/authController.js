@@ -6,6 +6,12 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+if (!JWT_SECRET) {
+  console.error("❌ JWT_SECRET is not defined in environment variables!");
+  process.exit(1); // Server ko start hone se rok do agar secret nahi hai
+}
+
+// ====================== REGISTER ======================
 export const register = async (req, res) => {
   try {
     const { username, email, phone, password } = req.body;
@@ -70,6 +76,7 @@ export const register = async (req, res) => {
   }
 };
 
+// ====================== LOGIN ======================
 export const login = async (req, res) => {
   try {
     const { key, password } = req.body;
@@ -100,7 +107,7 @@ export const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id },
       JWT_SECRET,
-      { expiresIn: "7d" } // remember me duration
+      { expiresIn: "1h" } // remember me duration
     );
     
     res.status(200).json({
