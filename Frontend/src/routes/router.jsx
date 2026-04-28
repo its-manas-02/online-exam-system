@@ -11,6 +11,7 @@ import Ranking from "../pages/Ranking";
 import Profile from './../pages/Profile';
 import TopicPage from "../pages/TopicPage";
 import QuizPage from "../pages/QuizPage";
+import MyQuiz from "../pages/MyQuiz";
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,15 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AddQuiz />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "my-quiz",
+        element: (
+          <ProtectedRoute>
+            <MyQuiz />
           </ProtectedRoute>
         ),
       },

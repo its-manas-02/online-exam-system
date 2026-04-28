@@ -103,7 +103,7 @@ export default function Navbar() {
       </div>
 
       {/* Secondary Menu */}
-      {user && user.role !== "admin" && (
+      {user && (
         <div className="flex items-center gap-1 px-4 py-2 overflow-x-auto text-sm bg-gray-100 border-b">
           <NavLink 
             to="/dashboard" 
@@ -128,6 +128,12 @@ export default function Navbar() {
             className={({ isActive }) => `px-4 py-2 rounded-md transition ${isActive ? 'bg-white shadow font-medium' : 'hover:bg-white'}`}
           >
             Add Quiz
+          </NavLink>
+          <NavLink 
+            to="/my-quiz" 
+            className={({ isActive }) => `px-4 py-2 rounded-md transition ${isActive ? 'bg-white shadow font-medium' : 'hover:bg-white'}`}
+          >
+            My Quiz
           </NavLink>
         </div>
       )}
