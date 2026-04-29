@@ -38,9 +38,7 @@ export default function Login() {
     try {
       const response = await fetch(`${API}/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json", },
         body: JSON.stringify(form),
       });
 
@@ -51,7 +49,7 @@ export default function Login() {
       }
 
       localStorage.setItem("token", data.token);
-      login(data.user);
+      login(data.user, data.token);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       console.log("Success:", data);
