@@ -1,6 +1,8 @@
 // Frontend/src/pages/TopicPage.jsx
 import React from "react";
 import { useParams, useNavigate, Outlet, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faRotate, faFileLines } from '@fortawesome/free-solid-svg-icons';
 import API from "../config/api";
 
 export default function TopicPage() {
@@ -78,6 +80,12 @@ export default function TopicPage() {
                           {quiz.description}
                         </p>
                       )}
+                      <div classname="grid grid-cols-1 gap-2 ">
+                        <span className="gap-2 px-2 py-2 bg-blue-600 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faFileLines} /> Result</span>
+                        <span className="gap-2 px-2 py-2 bg-green-600 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faPlay} /> Start</span>
+                        <span className="gap-2 px-2 py-2 bg-red-500 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faRotate} /> Restart</span>
+                      </div>
+                      
                     </div>
                   ))}
                 </div>
