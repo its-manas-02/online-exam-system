@@ -5,13 +5,18 @@ import API from '../config/api';
 
 export default function QuizPage() {
   const { quizSlug } = useParams();
-  const [timeLeft, setTimeLeft] = React.useState(60); // seconds
+  const storageKey = `quiz_${quizSlug}`;
+  const TOTAL_TIME = 60;
+
+  //reactHooks
+  const [timeLeft, setTimeLeft] = React.useState(TOTAL_TIME); // seconds
   const [quiz, setQuiz] = React.useState(null);
   const [questions, setQuestions] = React.useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
-  const [selectedAnswers, setSelectedAnswers] = React.useState({});
+  // const [selectedAnswers, setSelectedAnswers] = React.useState({});
   const [loading, setLoading] = React.useState(true);
-
+  const [answers, setAnswers] = React.useState([]);
+  const saveRef = React.useRef();
   React.useEffect(() => {
     const fetchQuiz = async () => {
       try {
@@ -41,17 +46,65 @@ export default function QuizPage() {
     }
 
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
+    setTimeLeft(prev => {
+      if (prev <= 1) {
+        clearInterval(timer);
+        handleSubmit();
+        return 0;
+      }
+      return prev - 1;
+    });
+  }, 1000);
 
     return () => clearInterval(timer);
   }, [timeLeft]);
+  
+  React.useEffect(() => {
+    const handler = () => {
+      alert("Quiz opened in another tab!");
+    };
+
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+
+  React.useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      setAnswers(parsed.answers || []);
+      setTimeLeft(parsed.timeLeft || TOTAL_TIME);
+    }
+  }, [quizSlug]);
+
+  React.useEffect(() => {
+    const data = {
+      answers,
+      timeLeft,
+    };
+
+    localStorage.setItem(storageKey, JSON.stringify(data));
+  }, [answers, timeLeft]);
 
   const handleOptionSelect = (questionId, option) => {
-    setSelectedAnswers(prev => ({
+    setAnswers(prev => ({
       ...prev,
       [questionId]: option
     }));
+  };
+
+  const handleSelect = (qIndex, optionIndex) => {
+    const updated = [...answers];
+    updated[qIndex] = optionIndex;
+    setAnswers(updated);
+  };
+
+  const handleSubmit = async () => {
+    alert("Time up! Submitting quiz...");
+    localStorage.removeItem(storageKey); // 🧹 clear saved state
+
+    // submit logic here
   };
 
   const goToNext = () => {
@@ -78,12 +131,7 @@ export default function QuizPage() {
     const seconds = time % 60;
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
-
-  const handleSubmit = () => {
-    alert("Time up! Submitting quiz...");
-    // later → calculate score
-  };
-
+  
   return (
     <div className="max-w-3xl p-6 mx-auto">
       {/* Header */}
@@ -120,7 +168,7 @@ export default function QuizPage() {
               key={index}
               onClick={() => handleOptionSelect(currentQuestion._id, option)}
               className={`p-5 border-2 rounded-xl cursor-pointer transition-all text-lg
-                ${selectedAnswers[currentQuestion._id] === option 
+                ${answers[currentQuestion._id] === option
                   ? 'border-blue-600 bg-blue-50' 
                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
             >
