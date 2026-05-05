@@ -4,6 +4,7 @@ import { protect } from "../middleware/auth.js";
 import Topic from "../models/Topic.js";
 import Quiz from "../models/Quiz.js";
 import Question from "../models/Question.js";
+import { submitQuiz } from "../controllers/resultController.js";
 
 const router = express.Router();
 
@@ -63,5 +64,7 @@ router.get("/quiz/:quizSlug", async (req, res) => {
     res.status(500).json({ message: "Server error while fetching quiz" });
   }
 });
+
+router.post("/quiz/submit", protect, submitQuiz);
 
 export default router;

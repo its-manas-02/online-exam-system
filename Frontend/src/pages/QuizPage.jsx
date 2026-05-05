@@ -105,6 +105,32 @@ export default function QuizPage() {
     localStorage.removeItem(storageKey); // 🧹 clear saved state
 
     // submit logic here
+    try {
+      const res = await fetch(`${API}/quiz/submit`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
+        },
+        body: JSON.stringify({
+          quizId: quiz._id,
+          answers,
+          timeLeft,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      localStorage.removeItem(storageKey);
+
+      alert(`Score: ${data.score}/${data.total}`);
+
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit");
+    }
   };
 
   const goToNext = () => {
@@ -191,7 +217,7 @@ export default function QuizPage() {
         {currentQuestionIndex === questions.length - 1 ? (
           <button 
             className="px-8 py-3 font-medium text-white transition bg-green-600 hover:bg-green-700 rounded-xl"
-            onClick={() => alert("Quiz Submitted! (Feature coming soon)")}
+            onClick={() => handleSubmit()}
           >
             Submit Quiz
           </button>
