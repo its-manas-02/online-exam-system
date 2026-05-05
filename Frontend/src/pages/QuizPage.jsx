@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import API from '../config/api';
 
 
 export default function QuizPage() {
   const { quizSlug } = useParams();
-  
-  const [quiz, setQuiz] = useState(null);
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswers, setSelectedAnswers] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = React.useState(60); // seconds
+  const [quiz, setQuiz] = React.useState(null);
+  const [questions, setQuestions] = React.useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+  const [selectedAnswers, setSelectedAnswers] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchQuiz = async () => {
       try {
         const res = await fetch(`${API}/quiz/${quizSlug}`);
@@ -33,6 +33,19 @@ export default function QuizPage() {
 
     fetchQuiz();
   }, [quizSlug]);
+
+  React.useEffect(() => {
+    if (timeLeft <= 0) {
+      handleSubmit(); // ⏱ auto submit
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
 
   const handleOptionSelect = (questionId, option) => {
     setSelectedAnswers(prev => ({
@@ -60,6 +73,17 @@ export default function QuizPage() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  const handleSubmit = () => {
+    alert("Time up! Submitting quiz...");
+    // later → calculate score
+  };
+
   return (
     <div className="max-w-3xl p-6 mx-auto">
       {/* Header */}
@@ -68,6 +92,12 @@ export default function QuizPage() {
         <p className="mt-2 text-gray-600">
           Question {currentQuestionIndex + 1} of {questions.length}
         </p>
+
+        <span className={`px-3 py-1 rounded-lg text-white ${
+          timeLeft <= 10 ? "bg-red-500" : "bg-blue-500"
+        }`}>
+          ⏱ {formatTime(timeLeft)}
+        </span>
         
         {/* Progress Bar */}
         <div className="w-full h-2 mt-4 bg-gray-200 rounded-full">

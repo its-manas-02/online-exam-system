@@ -80,10 +80,10 @@ export default function TopicPage() {
                           {quiz.description}
                         </p>
                       )}
-                      <div classname="grid grid-cols-1 gap-2 ">
-                        <span className="gap-2 px-2 py-2 bg-blue-600 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faFileLines} /> Result</span>
-                        <span className="gap-2 px-2 py-2 bg-green-600 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faPlay} /> Start</span>
-                        <span className="gap-2 px-2 py-2 bg-red-500 shadow-sm cursor-pointer rounded-xl hover:shadow-xl"><FontAwesomeIcon icon={faRotate} /> Restart</span>
+                      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
+                        <span className="flex items-center justify-center gap-2 px-3 py-2 text-sm text-white transition bg-blue-500 rounded-lg hover:bg-blue-600"><FontAwesomeIcon icon={faFileLines} /> Result</span>
+                        <span className="flex items-center justify-center gap-2 px-3 py-2 text-sm text-white transition bg-green-500 rounded-lg hover:bg-green-600"><FontAwesomeIcon icon={faPlay} /> Start</span>
+                        <span className="flex items-center justify-center gap-2 px-3 py-2 text-sm text-white transition bg-red-500 rounded-lg hover:bg-red-600"><FontAwesomeIcon icon={faRotate} /> Restart</span>
                       </div>
                       
                     </div>
