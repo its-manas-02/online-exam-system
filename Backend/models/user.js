@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     select: false,
   },
+  status: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
 }, { timestamps: true });
 
 export default mongoose.model("user", userSchema);
