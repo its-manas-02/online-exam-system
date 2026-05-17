@@ -36,28 +36,20 @@ export default function Login() {
     
     setLoading(true);
     try {
-      const response = await fetch(`${API}/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", },
-        body: JSON.stringify(form),
-      });
+      const response = await API.post(`/auth/login`, form);
+      const data = await response.data;
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
-      }
-
-      // localStorage.setItem("token", data.token);
       login(data.user, data.token);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       console.log("Success:", data);
       setError(""); // clear error
     } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+      console.error(err.response?.data);
+      setError(
+        err.response?.data?.message ||
+        "Invalid login credentials"
+      );
     }
   };
 
