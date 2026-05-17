@@ -2,7 +2,6 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import API from '../config/api';
 
-
 export default function QuizPage() {
   const { quizSlug } = useParams();
   const storageKey = `quiz_${quizSlug}`;
@@ -13,7 +12,6 @@ export default function QuizPage() {
   const [quiz, setQuiz] = React.useState(null);
   const [questions, setQuestions] = React.useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
-  // const [selectedAnswers, setSelectedAnswers] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [answers, setAnswers] = React.useState([]);
   const saveRef = React.useRef();
@@ -23,8 +21,8 @@ export default function QuizPage() {
         const res = await API.get(`/quiz/${quizSlug}`);
         const data = await res.data;
         
-          setQuiz(data);
-          setQuestions(data.questions || []);
+        setQuiz(data);
+        setQuestions(data.questions || []);
       } catch (error) {
         console.error("Failed to fetch quiz:",error.response?.data?.message || error.message);
       } finally {
@@ -42,15 +40,15 @@ export default function QuizPage() {
     }
 
     const timer = setInterval(() => {
-    setTimeLeft(prev => {
-      if (prev <= 1) {
-        clearInterval(timer);
-        handleSubmit();
-        return 0;
-      }
-      return prev - 1;
-    });
-  }, 1000);
+      setTimeLeft(prev => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          handleSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
 
     return () => clearInterval(timer);
   }, [timeLeft]);
@@ -115,8 +113,6 @@ export default function QuizPage() {
 
       // Axios automatically parses JSON
       const data = await res.data;
-
-      // if (!res.ok) throw new Error(data.message);
 
       // Clear saved quiz state only after successful submission
       localStorage.removeItem(storageKey);
@@ -193,8 +189,7 @@ export default function QuizPage() {
                 ${answers[currentQuestion._id] === option
                   ? 'border-blue-600 bg-blue-50' 
                   : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'}`}
-            >
-              {option}
+            >{option}
             </div>
           ))}
         </div>
@@ -206,23 +201,20 @@ export default function QuizPage() {
           onClick={goToPrevious}
           disabled={currentQuestionIndex === 0}
           className="px-6 py-3 font-medium transition bg-gray-200 hover:bg-gray-300 disabled:opacity-50 rounded-xl"
-        >
-          ← Previous
+        >← Previous
         </button>
 
         {currentQuestionIndex === questions.length - 1 ? (
           <button 
             className="px-8 py-3 font-medium text-white transition bg-green-600 hover:bg-green-700 rounded-xl"
             onClick={() => handleSubmit()}
-          >
-            Submit Quiz
+          >Submit Quiz
           </button>
         ) : (
           <button
             onClick={goToNext}
             className="px-8 py-3 font-medium text-white transition bg-blue-600 hover:bg-blue-700 rounded-xl"
-          >
-            Next →
+          >Next →
           </button>
         )}
       </div>

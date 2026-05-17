@@ -12,9 +12,6 @@ export default function Dashboard() {
   React.useEffect(() => {
     const fetchTopics = async () => {
       try {
-        // IMPORTANT:
-        // API is an Axios instance.
-        // Do NOT use fetch(`${API}/topics`)
         const response = await API.get("/topics");
 
         // Axios returns data in response.data
@@ -81,5 +78,4 @@ export default function Dashboard() {
       </div>
     </div>
   ); 
-
 }

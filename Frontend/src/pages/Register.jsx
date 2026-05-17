@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import API from '../config/api';
 
-function Register() {
+export default function Register() {
   const navigate = useNavigate();
   const { login } = useAuth();
   React.useEffect(() => {
@@ -63,22 +63,18 @@ function Register() {
       
       console.log("Success:", data);
     } catch (err) {
-      setError( 
-        err.response?.data?.message ||
-        err.message ||
-        "Registration failed");
+      setError( err.response?.data?.message || err.message || "Registration failed");
     } finally {
       setLoading(false);
     }
-  };
-  
+  };  
   
   return (
-    <div className='flex items-center justify-end h-screen bg-no-repeat bg-cover ' 
-    style={{backgroundImage: `URL(${bgImage})`, backgroundPosition: "center right"}}>
+    <div 
+      className='flex items-center justify-end h-screen bg-no-repeat bg-cover ' 
+      style={{backgroundImage: `URL(${bgImage})`, backgroundPosition: "center right"}}>
       {/* <img src={bgImage} alt="Background" /> */}
-      <div className="flex items-center justify-center w-1/3 h-full px-2 backdrop-blur-md"
-      >
+      <div className="flex items-center justify-center w-1/3 h-full px-2 backdrop-blur-md">
         <form className="space-y-4" onSubmit={handleSubmit} >
 
           <div className="flex items-center gap-4">
@@ -151,151 +147,3 @@ function Register() {
     </div>
   )
 }
-
-export default Register
-
-
-
-
-// import React from "react";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-// import Register from './Register';
-import Login from './Login';
-
-// function Register() {
-//   const [isLogin, setIsLogin] = React.useState(true);
-//   const [showPassword, setShowPassword] = React.useState(false);
-//   const [error, setError] = React.useState("");
-
-//   const [form, setForm] = React.useState({
-//     username: "",
-//     email: "",
-//     password: "",
-//   });
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     if (isLogin) {
-//       console.log("Login Data:", form);
-//       // call login API
-//     } else {
-//       console.log("Register Data:", form);
-//       // call register API
-//     }
-    
-//     try {
-//       const response = await fetch("http://localhost:5000/api/register", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify(form),
-//       });
-
-//       const data = await response.json();
-
-//       if (!response.ok) {
-//         throw new Error(data.message || "Something went wrong");
-//       }
-
-//       console.log("Success:", data);
-//       setError(""); // clear error
-//     } catch (err) {
-//       setError(err.message);
-//     }
-//   };
-
-//   return (
-//     <div className="flex justify-center mt-10">
-//       <div className="p-6 border rounded-lg shadow-md w-80">
-
-//         {/* Toggle */}
-//         <div className="flex justify-between mb-4">
-//           <button
-//             onClick={() => setIsLogin(true)}
-//             className={`w-1/2 py-1 ${isLogin ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-//           >
-//             Login
-//           </button>
-//           <button
-//             onClick={() => setIsLogin(false)}
-//             className={`w-1/2 py-1 ${!isLogin ? "bg-blue-500 text-white" : "bg-gray-200"}`}
-//           >
-//             Register
-//           </button>
-//         </div>
-
-//         {/* Form */}
-//         <form onSubmit={handleSubmit} className="space-y-3">
-
-//           {/* Username (only register) */}
-//           {!isLogin && (
-//             <input
-//               type="text"
-//               name="username"
-//               placeholder="Username"
-//               onChange={handleChange}
-//               className="w-full px-2 py-1 border rounded"
-//               required
-//             />
-//           )}
-
-//           {/* Email */}
-//           <input
-//             type="email"
-//             name="email"
-//             placeholder="Email"
-//             onChange={handleChange}
-//             className="w-full px-2 py-1 border rounded"
-//             required
-//           />
-
-//           {/* Password with eye */}
-//           <div className="relative">
-//             <input
-//               type={showPassword ? "text" : "password"}
-//               name="password"
-//               placeholder="Password"
-//               onChange={handleChange}
-//               className="w-full px-2 py-1 pr-10 border rounded"
-//               required
-//             />
-
-//             <span
-//               onClick={() => setShowPassword(!showPassword)}
-//               className="absolute -translate-y-1/2 cursor-pointer right-2 top-1/2"
-//             >
-//               <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-//             </span>
-//           </div>
-//           {error && <p className="text-red-500">{error}</p>}
-
-//           {/* Submit */}
-//           <button className="w-full py-1 text-white bg-blue-600 rounded">
-//             {isLogin ? "Login" : "Register"}
-//           </button>
-//         </form>
-
-//         {/* Switch link */}
-//         <p className="mt-3 text-sm text-center">
-//           {isLogin ? "Don't have an account?" : "Already have an account?"}
-//           <span
-//             onClick={() => setIsLogin(!isLogin)}
-//             className="ml-1 text-blue-600 cursor-pointer"
-//           >
-//             {isLogin ? "Register" : "Login"}
-//           </span>
-//         </p>
-
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Register;

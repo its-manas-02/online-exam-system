@@ -56,11 +56,10 @@ export default function Login() {
 
 
   return (
-    <div className='flex items-center justify-end h-screen bg-no-repeat bg-cover ' 
-        style={{backgroundImage: `URL(${bgImage})`, backgroundPosition: "center right"}}>
-      
-      <div className="flex items-center justify-center w-1/3 h-full px-2 backdrop-blur-md"
-      >
+    <div 
+      className='flex items-center justify-end h-screen bg-no-repeat bg-cover ' 
+      style={{backgroundImage: `URL(${bgImage})`, backgroundPosition: "center right"}}>      
+      <div className="flex items-center justify-center w-1/3 h-full px-2 backdrop-blur-md">
         
         <form onSubmit={handleSubmit}>
           <h2>Login</h2>
