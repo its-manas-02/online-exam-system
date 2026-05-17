@@ -48,7 +48,7 @@ export default function Login() {
         throw new Error(data.message || "Something went wrong");
       }
 
-      localStorage.setItem("token", data.token);
+      // localStorage.setItem("token", data.token);
       login(data.user, data.token);
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");

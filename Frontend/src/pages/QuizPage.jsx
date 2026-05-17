@@ -20,17 +20,13 @@ export default function QuizPage() {
   React.useEffect(() => {
     const fetchQuiz = async () => {
       try {
-        const res = await fetch(`${API}/quiz/${quizSlug}`);
-        const data = await res.json();
-
-        if (res.ok) {
+        const res = await API.get(`/quiz/${quizSlug}`);
+        const data = await res.data;
+        
           setQuiz(data);
           setQuestions(data.questions || []);
-        } else {
-          console.error("Error:", data.message);
-        }
       } catch (error) {
-        console.error("Failed to fetch quiz:", error);
+        console.error("Failed to fetch quiz:",error.response?.data?.message || error.message);
       } finally {
         setLoading(false);
       }
@@ -106,30 +102,30 @@ export default function QuizPage() {
 
     // submit logic here
     try {
-      const res = await fetch(`${API}/quiz/submit`, {
-        method: "POST",
+      const res = await API.post("/quiz/submit", {
+        quizId: quiz._id,
+        answers,
+        timeLeft,
+      }, {
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify({
-          quizId: quiz._id,
-          answers,
-          timeLeft,
-        }),
+        }
       });
 
-      const data = await res.json();
+      // Axios automatically parses JSON
+      const data = await res.data;
 
-      if (!res.ok) throw new Error(data.message);
+      // if (!res.ok) throw new Error(data.message);
 
+      // Clear saved quiz state only after successful submission
       localStorage.removeItem(storageKey);
 
       alert(`Score: ${data.score}/${data.total}`);
 
     } catch (err) {
-      console.error(err);
-      alert("Failed to submit");
+      console.error(err.response?.data?.message || err.message);
+      alert(err.response?.data?.message || "Failed to submit");
     }
   };
 

@@ -51,34 +51,22 @@ function Register() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/auth/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await API.post("/auth/register", form);
+      const data = response.data;
 
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Server did not return valid JSON");
-      }
-
-      if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
-      }
-
-      localStorage.setItem("token", data.token);
-      login(data.user);
+      // localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      login(data.user, data.token);
+      setError(""); // clear error
       console.log("Redirecting to dashboard...");
       navigate("/dashboard");
       
       console.log("Success:", data);
-      setError(""); // clear error
     } catch (err) {
-      setError(err.message);
+      setError( 
+        err.response?.data?.message ||
+        err.message ||
+        "Registration failed");
     } finally {
       setLoading(false);
     }

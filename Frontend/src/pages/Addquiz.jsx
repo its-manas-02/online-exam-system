@@ -66,16 +66,13 @@ export default function Addquiz() {
 
     setLoading(true);
     try {
-      const response = await fetch(`${API}/addquiz`, {
-        method: "POST",
+      const response = await API.post("/addquiz", form, {
         headers: {
-          "Content-Type": "application/json",
-          Authorization : `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(form),
       });
-      
-      const data = await response.json();
+
+      const data = await response.data;
 
       if (!response.ok) {
         throw new Error(data.message || "Something went wrong");

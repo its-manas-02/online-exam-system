@@ -23,8 +23,8 @@ export default function TopicPage() {
 
   React.useEffect(() => {
     setLoading(true);
-    fetch(`${API}/quiz/topic/${slug}`)
-      .then(res => res.json())
+    API.get(`/quiz/topic/${slug}`)
+      .then(res => res.data)
       .then(data => {
         if (Array.isArray(data)) {
           setQuizzes(data);
