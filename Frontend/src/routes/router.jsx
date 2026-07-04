@@ -12,11 +12,13 @@ import Profile from './../pages/Profile';
 import TopicPage from "../pages/TopicPage";
 import QuizPage from "../pages/QuizPage";
 import MyQuiz from "../pages/MyQuiz";
+import ErrorBoundary from "../components/ErrorBoundary";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
+    errorElement: <ErrorBoundary />,
     children: [
       { index: true, element: <Home /> },
       { path: "home", element: <Home /> },
@@ -56,6 +58,15 @@ const router = createBrowserRouter([
       },
 
       {
+        path: "addquiz",
+        element: (
+          <ProtectedRoute>
+            <AddQuiz />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
         path: "my-quiz",
         element: (
           <ProtectedRoute>
@@ -85,12 +96,25 @@ const router = createBrowserRouter([
       {
         path: "topic/:slug",
         element: <TopicPage />,
-        children:[
-          {
-            path: "quiz/:quizSlug",
-            element: <QuizPage />,
-          },
-        ],
+      },
+
+      {
+        path: "results/:slug",
+        element: (
+          <ProtectedRoute>
+            <Result />
+          </ProtectedRoute>
+        ),
+      },
+
+      {
+        path: "quiz/:quizSlug",
+        element: <QuizPage />,
+      },
+
+      {
+        path: "*",
+        element: <ErrorBoundary />,
       },
     ],
   },

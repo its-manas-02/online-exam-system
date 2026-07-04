@@ -116,4 +116,147 @@ router.get("/rankings", async (req, res) => {
   }
 });
 
+// Get My Quizzes (for authenticated user)
+router.get("/my-quizzes", protect, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const quizzes = await Quiz.find({ createdBy: userId })
+      .populate("topic", "name slug")
+      .select("title slug topic createdAt")
+      .sort({ createdAt: -1 });
+
+    // Get question count for each quiz
+    const quizzesWithCount = await Promise.all(
+      quizzes.map(async (quiz) => {
+        const questionCount = await Question.countDocuments({ quiz: quiz._id });
+        return {
+          ...quiz.toObject(),
+          questionCount
+        };
+      })
+    );
+
+    res.json(quizzesWithCount);
+  } catch (error) {
+    console.error("Error fetching user quizzes:", error);
+    res.status(500).json({ message: "Server error while fetching quizzes" });
+  }
+});
+
+// Get user's results for a specific quiz
+router.get("/quiz/:quizSlug/my-results", protect, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const quizSlug = req.params.quizSlug;
+
+    const quiz = await Quiz.findOne({ slug: quizSlug });
+    if (!quiz) {
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    const results = await Result.find({ user: userId, quiz: quiz._id })
+      .select("score total timeTaken createdAt")
+      .sort({ createdAt: -1 });
+
+    res.json({
+      quizId: quiz._id,
+      quizTitle: quiz.title,
+      results: results,
+      attemptCount: results.length,
+      bestScore: results.length > 0 ? Math.max(...results.map(r => r.score)) : 0,
+      lastAttempt: results.length > 0 ? results[0].createdAt : null
+    });
+  } catch (error) {
+    console.error("Error fetching user results:", error);
+    res.status(500).json({ message: "Server error while fetching results" });
+  }
+});
+
+// Get all results for a quiz (for result page display)
+router.get("/quiz/:quizSlug/results", protect, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const quizSlug = req.params.quizSlug;
+
+    console.log("📡 Fetching results for slug:", quizSlug, "user:", userId);
+
+    const quiz = await Quiz.findOne({ slug: quizSlug });
+    if (!quiz) {
+      console.log("❌ Quiz not found:", quizSlug);
+      return res.status(404).json({ message: "Quiz not found" });
+    }
+
+    console.log("✅ Found quiz:", quiz._id);
+
+    const results = await Result.find({ user: userId, quiz: quiz._id })
+      .select("_id score total timeTaken createdAt")
+      .sort({ createdAt: -1 });
+
+    console.log("✅ Found results:", results.length);
+    res.json(results);
+  } catch (error) {
+    console.error("❌ Error fetching results:", error);
+    res.status(500).json({ message: "Server error while fetching results" });
+  }
+});
+
+// Get detailed result review (right/wrong answers with full details)
+router.get("/result/:resultId/review", protect, async (req, res) => {
+  try {
+    const resultId = req.params.resultId;
+    const userId = req.user.id;
+
+    // Fetch the result
+    const result = await Result.findById(resultId)
+      .populate("quiz")
+      .populate("user", "username email");
+
+    if (!result) {
+      return res.status(404).json({ message: "Result not found" });
+    }
+
+    // Verify user owns this result
+    if (result.user._id.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    // Fetch all questions with full details
+    const questions = await Question.find({ quiz: result.quiz._id });
+
+    // Build detailed review with answer details
+    const detailedReview = questions.map((q) => {
+      const userAnswerIndex = result.answers.get(q._id.toString());
+      const correctAnswerIndex = q.correctAnswer;
+      const isCorrect = userAnswerIndex === correctAnswerIndex;
+
+      return {
+        questionId: q._id,
+        question: q.question,
+        options: q.options,
+        userAnswer: userAnswerIndex ? q.options[userAnswerIndex - 1] : null,
+        userAnswerIndex,
+        correctAnswer: q.options[correctAnswerIndex - 1],
+        correctAnswerIndex,
+        isCorrect
+      };
+    });
+
+    res.json({
+      resultId: result._id,
+      quizTitle: result.quiz.title,
+      userName: result.user.username,
+      score: result.score,
+      total: result.total,
+      percentage: Math.round((result.score / result.total) * 100),
+      timeTaken: result.timeTaken,
+      submittedAt: result.createdAt,
+      details: detailedReview
+    });
+  } catch (error) {
+    console.error("Error fetching result review:", error);
+    res.status(500).json({ message: "Server error while fetching result review" });
+  }
+});
+
 export default router;
