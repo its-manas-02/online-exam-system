@@ -4,6 +4,7 @@ import { protect } from "../middleware/auth.js";
 import Topic from "../models/Topic.js";
 import Quiz from "../models/Quiz.js";
 import Question from "../models/Question.js";
+import Result from "../models/Result.js";
 import { submitQuiz } from "../controllers/resultController.js";
 
 const router = express.Router();
@@ -66,5 +67,53 @@ router.get("/quiz/:quizSlug", async (req, res) => {
 });
 
 router.post("/quiz/submit", protect, submitQuiz);
+
+// Get Rankings
+router.get("/rankings", async (req, res) => {
+  try {
+    const rankings = await Result.aggregate([
+      {
+        $group: {
+          _id: "$user",
+          totalScore: { $sum: "$score" },
+          quizzesAttempted: { $sum: 1 },
+          averageScore: { $avg: "$score" }
+        }
+      },
+      { $sort: { totalScore: -1 } },
+      { $limit: 100 },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id",
+          foreignField: "_id",
+          as: "userDetails"
+        }
+      },
+      { $unwind: "$userDetails" },
+      {
+        $project: {
+          _id: 1,
+          username: "$userDetails.username",
+          email: "$userDetails.email",
+          totalScore: 1,
+          quizzesAttempted: 1,
+          averageScore: { $round: ["$averageScore", 2] }
+        }
+      }
+    ]);
+
+    // Add rank field
+    const rankedResults = rankings.map((result, index) => ({
+      ...result,
+      rank: index + 1
+    }));
+
+    res.json(rankedResults);
+  } catch (error) {
+    console.error("Error fetching rankings:", error);
+    res.status(500).json({ message: "Server error while fetching rankings" });
+  }
+});
 
 export default router;
